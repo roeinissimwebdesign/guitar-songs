@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Heebo', ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #100e0c;
+  --color-ink-2: #1a1714;
+  --color-ink-3: #262119;
+  --color-line: #342d24;
+  --color-cream: #f3ece1;
+  --color-muted: #a2968a;
+  --color-ember: #e8a13a;
+  --color-ember-dim: #7a5720;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-ink);
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+
+  input,
+  textarea,
+  button,
+  select {
+    font-family: inherit;
+  }
+
+  /* iOS zooms the whole page in on focus for anything under 16px */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+@utility safe-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);
+}
+
+@utility safe-top {
+  padding-top: calc(env(safe-area-inset-top) + 0.5rem);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-rise {
+  animation: rise 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
