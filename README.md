@@ -17,6 +17,16 @@ npm run dev
 
 השרת עולה על http://localhost:5273 . כדי לפתוח בטלפון שמחובר לאותו וויפיי, השתמש בכתובת ה-Network שוויט מדפיס.
 
+## העלאה לאוויר
+
+האתר החי יושב ב-https://roeinissimwebdesign.github.io/guitar-songs/ ומוגש מענף `gh-pages` דרך GitHub Pages. אחרי שינוי בקוד מריצים
+
+```bash
+npm run deploy
+```
+
+הפקודה בונה ודוחפת את התוצאה לענף הזה. הכתובת קבועה ולא משתנה בין פריסות.
+
 ## נתונים
 
 הכל נשמר קודם מקומית ב-localStorage, כך שהאפליקציה נפתחת מיד ועובדת בלי רשת. ברקע יש מראה ב-Supabase, בטבלאות `guitar_songs` ו-`guitar_sets` שבפרויקט `jwcnrkziivefiptrohgj`. שינוי שנעשה בלי רשת נשמר בתור ונדחף כשהחיבור חוזר.
