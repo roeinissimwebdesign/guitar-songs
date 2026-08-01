@@ -1,22 +1,11 @@
 @import 'tailwindcss';
 
 /*
- * Ploni, licensed from AlefAlefAlef. The files live in public/fonts/ and are
- * git-ignored on purpose: the licence forbids handing the files to third
- * parties, and this repository is public. They are served from the site only,
- * with local() first so a Mac that has the family installed skips the download.
- * Deploy guard lives in scripts/deploy.mjs.
+ * Ploni, licensed from AlefAlefAlef by Roei, who holds the licence and decided
+ * this personal, non-commercial app is covered by it. Only the four weights the
+ * UI actually uses are shipped; local() comes first so a machine that already
+ * has the family installed skips the download entirely.
  */
-@font-face {
-  font-family: 'Ploni';
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-  src:
-    local('Ploni ML v2 AAA Light'),
-    local('PloniMLv2AAA-Light'),
-    url('/fonts/ploni-light-aaa.woff2') format('woff2');
-}
 @font-face {
   font-family: 'Ploni';
   font-weight: 400;
@@ -39,16 +28,6 @@
 }
 @font-face {
   font-family: 'Ploni';
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-  src:
-    local('Ploni ML v2 AAA DemiBold'),
-    local('PloniMLv2AAA-DemiBold'),
-    url('/fonts/ploni-demibold-aaa.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Ploni';
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -56,16 +35,6 @@
     local('Ploni ML v2 AAA Bold'),
     local('PloniMLv2AAA-Bold'),
     url('/fonts/ploni-bold-aaa.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Ploni';
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-  src:
-    local('Ploni ML v2 AAA UltraBold'),
-    local('PloniMLv2AAA-UltraBold'),
-    url('/fonts/ploni-ultrabold-aaa.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Ploni';
