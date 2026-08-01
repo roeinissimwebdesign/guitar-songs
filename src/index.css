@@ -1,7 +1,57 @@
 @import 'tailwindcss';
 
+/*
+ * Ploni is referenced with local() only — it resolves on a machine that has the
+ * family installed and silently falls back to Heebo everywhere else. Nothing is
+ * bundled or served, because the AlefAlefAlef desktop license does not cover web
+ * embedding and forbids putting the files in a public repository. Once a webfont
+ * license is in hand, add woff2 sources next to each local() and it goes live.
+ */
+@font-face {
+  font-family: 'Ploni';
+  font-weight: 300;
+  font-display: swap;
+  src: local('Ploni ML v2 AAA Light'), local('PloniMLv2AAA-Light');
+}
+@font-face {
+  font-family: 'Ploni';
+  font-weight: 400;
+  font-display: swap;
+  src: local('Ploni ML v2 AAA Regular'), local('PloniMLv2AAA-Regular');
+}
+@font-face {
+  font-family: 'Ploni';
+  font-weight: 500;
+  font-display: swap;
+  src: local('Ploni ML v2 AAA Medium'), local('PloniMLv2AAA-Medium');
+}
+@font-face {
+  font-family: 'Ploni';
+  font-weight: 600;
+  font-display: swap;
+  src: local('Ploni ML v2 AAA DemiBold'), local('PloniMLv2AAA-DemiBold');
+}
+@font-face {
+  font-family: 'Ploni';
+  font-weight: 700;
+  font-display: swap;
+  src: local('Ploni ML v2 AAA Bold'), local('PloniMLv2AAA-Bold');
+}
+@font-face {
+  font-family: 'Ploni';
+  font-weight: 800;
+  font-display: swap;
+  src: local('Ploni ML v2 AAA UltraBold'), local('PloniMLv2AAA-UltraBold');
+}
+@font-face {
+  font-family: 'Ploni';
+  font-weight: 900;
+  font-display: swap;
+  src: local('Ploni ML v2 AAA Black'), local('PloniMLv2AAA-Black');
+}
+
 @theme {
-  --font-sans: 'Heebo', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Ploni', 'Heebo', ui-sans-serif, system-ui, sans-serif;
 
   --color-ink: #100e0c;
   --color-ink-2: #1a1714;

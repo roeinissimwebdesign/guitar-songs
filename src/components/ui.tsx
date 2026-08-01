@@ -137,11 +137,16 @@ export function GhostButton({
   )
 }
 
-/** Titles can be Hebrew or English — dir="auto" keeps punctuation on the right side. */
+/**
+ * Titles mix Hebrew and English. The explicit dir="rtl" matters: a bare <bdi>
+ * defaults to dir="auto", which would detect an English title as LTR and align
+ * it to the left edge, out of line with every Hebrew row around it. Isolation
+ * still lets the English letters read left-to-right inside the run.
+ */
 export function Bidi({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <span dir="auto" className={className}>
+    <bdi dir="rtl" className={className}>
       {children}
-    </span>
+    </bdi>
   )
 }
