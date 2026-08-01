@@ -83,7 +83,7 @@ export function SurpriseView({
             {song.artist && (
               <Bidi className="mb-3 text-sm font-medium tracking-wide text-ember/90">{song.artist}</Bidi>
             )}
-            <Bidi className="text-[2.6rem] leading-[1.08] font-black text-cream">{song.title}</Bidi>
+            <Bidi className="text-[2.6rem] leading-[1.08] font-bold text-cream">{song.title}</Bidi>
 
             <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-muted">
               <span>{agoLabel(song.last_played_at)}</span>
@@ -122,7 +122,7 @@ export function SurpriseView({
         <button
           type="button"
           onClick={roll}
-          className="flex w-full items-center justify-center gap-2.5 rounded-full bg-ember py-4 text-lg font-black text-ink transition active:scale-[0.98]"
+          className="flex w-full items-center justify-center gap-2.5 rounded-full bg-ember py-4 text-lg font-bold text-ink transition active:scale-[0.98]"
         >
           <Shuffle className="size-5" />
           הפתע אותי

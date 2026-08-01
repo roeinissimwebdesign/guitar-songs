@@ -155,7 +155,7 @@ export function PlayView({
           </pre>
         ) : (
           <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-            <Bidi className="text-4xl font-black text-cream">{song.title}</Bidi>
+            <Bidi className="text-4xl font-bold text-cream">{song.title}</Bidi>
             {song.artist && <Bidi className="text-base text-muted">{song.artist}</Bidi>}
             <p className="max-w-xs text-sm leading-relaxed text-muted/80">
               לשיר הזה עוד לא שמורים אקורדים. אם תרצה אותם על המסך בזמן נגינה, אפשר להוסיף אותם בעריכה.

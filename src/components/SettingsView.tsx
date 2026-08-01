@@ -136,7 +136,7 @@ export function SettingsView({
 function Stat({ value, label }: { value: number; label: string }) {
   return (
     <div className="rounded-2xl border border-line/50 bg-ink-2 px-3 py-4 text-center">
-      <div className="text-2xl font-black text-cream">{value}</div>
+      <div className="text-2xl font-bold text-cream">{value}</div>
       <div className="text-xs text-muted">{label}</div>
     </div>
   )
