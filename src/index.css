@@ -1,53 +1,81 @@
 @import 'tailwindcss';
 
 /*
- * Ploni is referenced with local() only — it resolves on a machine that has the
- * family installed and silently falls back to Heebo everywhere else. Nothing is
- * bundled or served, because the AlefAlefAlef desktop license does not cover web
- * embedding and forbids putting the files in a public repository. Once a webfont
- * license is in hand, add woff2 sources next to each local() and it goes live.
+ * Ploni, licensed from AlefAlefAlef. The files live in public/fonts/ and are
+ * git-ignored on purpose: the licence forbids handing the files to third
+ * parties, and this repository is public. They are served from the site only,
+ * with local() first so a Mac that has the family installed skips the download.
+ * Deploy guard lives in scripts/deploy.mjs.
  */
 @font-face {
   font-family: 'Ploni';
   font-weight: 300;
+  font-style: normal;
   font-display: swap;
-  src: local('Ploni ML v2 AAA Light'), local('PloniMLv2AAA-Light');
+  src:
+    local('Ploni ML v2 AAA Light'),
+    local('PloniMLv2AAA-Light'),
+    url('/fonts/ploni-light-aaa.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Ploni';
   font-weight: 400;
+  font-style: normal;
   font-display: swap;
-  src: local('Ploni ML v2 AAA Regular'), local('PloniMLv2AAA-Regular');
+  src:
+    local('Ploni ML v2 AAA Regular'),
+    local('PloniMLv2AAA-Regular'),
+    url('/fonts/ploni-regular-aaa.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Ploni';
   font-weight: 500;
+  font-style: normal;
   font-display: swap;
-  src: local('Ploni ML v2 AAA Medium'), local('PloniMLv2AAA-Medium');
+  src:
+    local('Ploni ML v2 AAA Medium'),
+    local('PloniMLv2AAA-Medium'),
+    url('/fonts/ploni-medium-aaa.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Ploni';
   font-weight: 600;
+  font-style: normal;
   font-display: swap;
-  src: local('Ploni ML v2 AAA DemiBold'), local('PloniMLv2AAA-DemiBold');
+  src:
+    local('Ploni ML v2 AAA DemiBold'),
+    local('PloniMLv2AAA-DemiBold'),
+    url('/fonts/ploni-demibold-aaa.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Ploni';
   font-weight: 700;
+  font-style: normal;
   font-display: swap;
-  src: local('Ploni ML v2 AAA Bold'), local('PloniMLv2AAA-Bold');
+  src:
+    local('Ploni ML v2 AAA Bold'),
+    local('PloniMLv2AAA-Bold'),
+    url('/fonts/ploni-bold-aaa.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Ploni';
   font-weight: 800;
+  font-style: normal;
   font-display: swap;
-  src: local('Ploni ML v2 AAA UltraBold'), local('PloniMLv2AAA-UltraBold');
+  src:
+    local('Ploni ML v2 AAA UltraBold'),
+    local('PloniMLv2AAA-UltraBold'),
+    url('/fonts/ploni-ultrabold-aaa.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Ploni';
   font-weight: 900;
+  font-style: normal;
   font-display: swap;
-  src: local('Ploni ML v2 AAA Black'), local('PloniMLv2AAA-Black');
+  src:
+    local('Ploni ML v2 AAA Black'),
+    local('PloniMLv2AAA-Black'),
+    url('/fonts/ploni-black-aaa.woff2') format('woff2');
 }
 
 @theme {

@@ -27,3 +27,6 @@ dist-ssr
 .env
 .env.local
 dist
+
+# Licensed AAA webfonts — never commit these to a public repo
+public/fonts/
