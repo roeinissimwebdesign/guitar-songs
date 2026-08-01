@@ -38,7 +38,7 @@ export function SetsView({
 
   return (
     <Screen>
-      <div className="safe-top flex shrink-0 items-center justify-between pb-3 pe-5 ps-14">
+      <div className="safe-top flex shrink-0 items-center justify-between pb-3 pe-14 ps-14">
         <h1 className="text-lg font-bold text-cream">סטים</h1>
         <IconButton onClick={() => setCreating(true)} label="סט חדש">
           <Plus className="size-5" />
@@ -143,7 +143,7 @@ function SetDetail({
 
     return (
       <Screen>
-        <div className="safe-top flex shrink-0 items-center gap-3 pb-3 pe-3 ps-14">
+        <div className="safe-top flex shrink-0 items-center gap-3 pb-3 pe-14 ps-14">
           <IconButton onClick={() => setPicking(false)} label="סיום">
             <Close className="size-5" />
           </IconButton>
@@ -193,7 +193,7 @@ function SetDetail({
 
   return (
     <Screen>
-      <div className="safe-top flex shrink-0 items-center gap-2 pb-3 pe-3 ps-14">
+      <div className="safe-top flex shrink-0 items-center gap-2 pb-3 pe-14 ps-14">
         <IconButton onClick={onClose} label="חזרה">
           <Back className="size-5" />
         </IconButton>

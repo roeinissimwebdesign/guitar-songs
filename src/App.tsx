@@ -9,6 +9,7 @@ import { PlayView } from './components/PlayView'
 import { SongEditor } from './components/SongEditor'
 import { ImportView } from './components/ImportView'
 import { SettingsView } from './components/SettingsView'
+import { QuickAddButton, QuickAddSheet } from './components/QuickAdd'
 import { IconButton } from './components/ui'
 import { Gear, Layers, ListIcon, Shuffle } from './components/icons'
 
@@ -30,6 +31,7 @@ export default function App() {
   const [editing, setEditing] = useState<Song | null>(null)
   const [importing, setImporting] = useState(false)
   const [settings, setSettings] = useState(false)
+  const [quickAdd, setQuickAdd] = useState(false)
 
   useEffect(() => {
     void init()
@@ -55,7 +57,10 @@ export default function App() {
 
   return (
     <div className="relative mx-auto flex h-full max-w-lg flex-col overflow-hidden">
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex justify-start p-2">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex justify-between p-2">
+        <div className="safe-top pointer-events-auto pe-2">
+          <QuickAddButton onOpen={() => setQuickAdd(true)} />
+        </div>
         <div className="safe-top pointer-events-auto ps-2">
           <IconButton onClick={() => setSettings(true)} label="הגדרות">
             <Gear className="size-5" />
@@ -143,6 +148,8 @@ export default function App() {
           }}
         />
       )}
+
+      {quickAdd && <QuickAddSheet songs={songs} onClose={() => setQuickAdd(false)} />}
     </div>
   )
 }

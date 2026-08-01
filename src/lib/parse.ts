@@ -11,14 +11,15 @@ const BULLET = /^\s*(?:[-–—*•‣·]|\d{1,3}[.)\]]|\(\d{1,3}\))\s+/
 const SPLITTERS = ['\t', ' — ', ' – ', ' - ', ' | ', ' / ', ' ~ ']
 const TRAILING_PARENS = /^(.*?)[\s]*[(（]([^()]{2,40})[)）]\s*$/
 
-function splitLine(line: string): [string, string] {
+/** Splits "title - artist" (also " / ", " | ", a tab, or trailing parens) into a tuple. */
+export function splitLine(line: string): [string, string] {
   for (const sep of SPLITTERS) {
     const at = line.indexOf(sep)
     if (at > 0) return [line.slice(0, at).trim(), line.slice(at + sep.length).trim()]
   }
   const parens = line.match(TRAILING_PARENS)
   if (parens) return [parens[1].trim(), parens[2].trim()]
-  return [line.trim(), '']
+  return [line.replace(BULLET, '').trim(), '']
 }
 
 /**
