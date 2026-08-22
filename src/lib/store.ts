@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react'
 import { supabase, cloudEnabled } from './supabase'
-import type { Song, SongSet, SongStatus } from './types'
+import type { Song, SongSet } from './types'
 
 /**
  * Local-first store. The screen always renders from localStorage so the app
@@ -87,7 +87,7 @@ function persistSets(sets: SongSet[]) {
 
 export async function init() {
   emit({
-    songs: read<Song[]>(K.songs, []).map((s) => ({ ...s, status: s.status ?? 'known' })),
+    songs: read<Song[]>(K.songs, []),
     sets: read<SongSet[]>(K.sets, []),
     loaded: true,
   })
@@ -168,9 +168,7 @@ async function pull() {
   if (setErr) throw setErr
 
   // Nothing is dirty at this point (push ran first), so the cloud is the truth.
-  // Rows written before the known/wish split have no status — they are all
-  // songs Roei already plays, which is what 'known' means.
-  persistSongs(((songs ?? []) as Song[]).map((s) => ({ ...s, tags: s.tags ?? [], status: s.status ?? 'known' })))
+  persistSongs(((songs ?? []) as Song[]).map((s) => ({ ...s, tags: s.tags ?? [] })))
   persistSets((sets ?? []) as SongSet[])
 }
 
@@ -215,11 +213,6 @@ export function deleteSong(id: string) {
 export function toggleFavorite(id: string) {
   const song = state.songs.find((s) => s.id === id)
   if (song) saveSong({ ...song, favorite: !song.favorite })
-}
-
-export function setSongStatus(id: string, status: SongStatus) {
-  const song = state.songs.find((s) => s.id === id)
-  if (song && song.status !== status) saveSong({ ...song, status })
 }
 
 export function markPlayed(id: string) {

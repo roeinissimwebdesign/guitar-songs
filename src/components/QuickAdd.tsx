@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { Song, SongStatus } from '../lib/types'
+import type { Song } from '../lib/types'
 import { emptySong } from '../lib/types'
 import { deleteSong, saveSong } from '../lib/store'
 import { splitLine } from '../lib/parse'
@@ -54,9 +54,6 @@ export function QuickAddSheet({
   const [value, setValue] = useState(initial)
   const [sessionIds, setSessionIds] = useState<string[]>([])
   const [busy, setBusy] = useState(false)
-  // A song arriving from a share sheet was just heard somewhere, so it starts
-  // life on the wish list; one typed by hand is usually one he already plays.
-  const [status, setStatus] = useState<SongStatus>(initial ? 'wish' : 'known')
   const [note, setNote] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -103,7 +100,7 @@ export function QuickAddSheet({
 
   const submit = () => {
     if (!title) return
-    const song = emptySong({ title, artist, status })
+    const song = emptySong({ title, artist })
     saveSong(song)
     setSessionIds((ids) => [song.id, ...ids])
     setValue('')
@@ -177,24 +174,6 @@ export function QuickAddSheet({
             <Plus className="size-5" />
           </button>
         </form>
-
-        <div className="mt-3 flex rounded-full border border-line/60 bg-ink p-0.5">
-          {([
-            ['known', 'אני יודע לנגן'],
-            ['wish', 'רוצה ללמוד'],
-          ] as const).map(([id, label]) => (
-            <button
-              key={id}
-              type="button"
-              onClick={() => setStatus(id)}
-              className={`flex-1 rounded-full py-2 text-sm font-medium transition ${
-                status === id ? 'bg-ember text-ink' : 'text-muted'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
 
         <div className="min-h-5 px-1 pt-1.5 text-sm text-muted">
           {busy

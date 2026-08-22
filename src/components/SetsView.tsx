@@ -137,9 +137,7 @@ function SetDetail({
   }
 
   if (picking) {
-    // A set is something he sits down and plays, so it only draws on what he knows.
     const candidates = songs
-      .filter((song) => song.status !== 'wish')
       .filter((song) => matches(query, song.title, song.artist))
       .sort((a, b) => a.title.localeCompare(b.title, 'he'))
 

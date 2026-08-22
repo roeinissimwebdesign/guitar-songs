@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { Song } from '../lib/types'
-import { markPlayed, setSongStatus, toggleFavorite } from '../lib/store'
+import { markPlayed, toggleFavorite } from '../lib/store'
 import { parseChordSheet, transposeLine } from '../lib/chords'
 import { isHebrew } from '../lib/text'
 import { Bidi, IconButton } from './ui'
@@ -91,7 +91,7 @@ export function PlayView({
         <div className="min-w-0 flex-1 text-center">
           <Bidi className="block truncate text-base font-bold text-cream">{song.title}</Bidi>
           <Bidi className="block truncate text-xs text-muted">
-            {position ?? (song.status === 'wish' ? [song.artist, 'ללמוד'].filter(Boolean).join(' · ') : song.artist)}
+            {position ?? song.artist}
           </Bidi>
         </div>
 
@@ -220,31 +220,19 @@ export function PlayView({
               <Back className="size-5" />
             </IconButton>
           )}
-          {song.status === 'wish' ? (
-            /* The whole point of the wish list: one tap the day it clicks. */
-            <button
-              type="button"
-              onClick={() => setSongStatus(song.id, 'known')}
-              className="flex flex-1 items-center justify-center gap-2 rounded-full bg-ember py-3 text-sm font-bold text-ink transition active:scale-[0.98]"
-            >
-              <Check className="size-4" />
-              למדתי לנגן את זה
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => {
-                markPlayed(song.id)
-                setPlayed(true)
-              }}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-full py-3 text-sm font-medium transition active:scale-[0.98] ${
-                played ? 'border border-ember/50 bg-ember/10 text-ember' : 'border border-line/70 bg-ink-2 text-cream/80'
-              }`}
-            >
-              {played ? <Check className="size-4" /> : null}
-              {played ? 'סומן שניגנת' : 'ניגנתי את זה'}
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={() => {
+              markPlayed(song.id)
+              setPlayed(true)
+            }}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-full py-3 text-sm font-medium transition active:scale-[0.98] ${
+              played ? 'border border-ember/50 bg-ember/10 text-ember' : 'border border-line/70 bg-ink-2 text-cream/80'
+            }`}
+          >
+            {played ? <Check className="size-4" /> : null}
+            {played ? 'סומן שניגנת' : 'ניגנתי את זה'}
+          </button>
           {onNext && (
             <IconButton onClick={onNext} label="הבא">
               <Forward className="size-5" />

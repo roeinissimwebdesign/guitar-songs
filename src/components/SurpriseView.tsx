@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Song } from '../lib/types'
 import { toggleFavorite } from '../lib/store'
 import { Bidi, Empty, PrimaryButton, Screen } from './ui'
@@ -49,10 +49,6 @@ export function SurpriseView({
   const [current, setCurrent] = useState<Song | null>(null)
   const history = useRef<string[]>([])
 
-  // Two separate draws: what to play now, and what to pick up next.
-  const known = useMemo(() => songs.filter((s) => s.status !== 'wish'), [songs])
-  const wish = useMemo(() => songs.filter((s) => s.status === 'wish'), [songs])
-
   const roll = useCallback(
     (from: Song[]) => {
       const next = pick(from, history.current.slice(-12))
@@ -64,8 +60,8 @@ export function SurpriseView({
   )
 
   useEffect(() => {
-    if (!current && known.length) roll(known)
-  }, [known, current, roll])
+    if (!current && songs.length) roll(songs)
+  }, [songs, current, roll])
 
   // The stored copy can change under us (favorite, play count) — always render fresh.
   const song = current ? (songs.find((s) => s.id === current.id) ?? current) : null
@@ -87,11 +83,6 @@ export function SurpriseView({
       <div className="flex flex-1 flex-col items-center justify-center px-7 text-center">
         {song && (
           <div key={song.id} className="animate-rise flex w-full flex-col items-center">
-            {song.status === 'wish' && (
-              <span className="mb-3 rounded-full border border-ember/50 bg-ember/10 px-3 py-1 text-xs font-medium text-ember">
-                שיר ללמוד
-              </span>
-            )}
             {song.artist && (
               <Bidi className="mb-3 text-sm font-medium tracking-wide text-ember/90">{song.artist}</Bidi>
             )}
@@ -133,22 +124,13 @@ export function SurpriseView({
       <div className="shrink-0 px-7 pb-4">
         <button
           type="button"
-          onClick={() => roll(known)}
-          disabled={!known.length}
+          onClick={() => roll(songs)}
+          disabled={!songs.length}
           className="flex w-full items-center justify-center gap-2.5 rounded-full bg-ember py-4 text-lg font-bold text-ink transition active:scale-[0.98] disabled:opacity-40"
         >
           <Shuffle className="size-5" />
           הפתע אותי
         </button>
-        {wish.length > 0 && (
-          <button
-            type="button"
-            onClick={() => roll(wish)}
-            className="mt-2.5 w-full py-2 text-sm font-medium text-muted transition active:scale-[0.98]"
-          >
-            מה ללמוד היום?
-          </button>
-        )}
       </div>
     </Screen>
   )
