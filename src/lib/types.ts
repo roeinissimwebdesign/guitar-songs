@@ -1,3 +1,6 @@
+/** 'known' = plays it today, 'wish' = heard it and wants to learn it. */
+export type SongStatus = 'known' | 'wish'
+
 export type Song = {
   id: string
   title: string
@@ -9,6 +12,7 @@ export type Song = {
   youtube_url: string
   notes: string
   tags: string[]
+  status: SongStatus
   favorite: boolean
   play_count: number
   last_played_at: string | null
@@ -37,6 +41,7 @@ export function emptySong(partial: Partial<Song> = {}): Song {
     youtube_url: '',
     notes: '',
     tags: [],
+    status: 'known',
     favorite: false,
     play_count: 0,
     last_played_at: null,

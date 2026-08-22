@@ -25,6 +25,12 @@ export default defineConfig(({ command }) => ({
         start_url: BASE,
         scope: BASE,
         display: 'standalone',
+        // Lets the OS share sheet hand a song straight to the app.
+        share_target: {
+          action: BASE,
+          method: 'GET',
+          params: { title: 'title', text: 'text', url: 'url' },
+        },
         orientation: 'portrait',
         background_color: '#12100E',
         theme_color: '#12100E',

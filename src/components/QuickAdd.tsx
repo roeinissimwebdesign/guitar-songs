@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import type { Song } from '../lib/types'
+import type { Song, SongStatus } from '../lib/types'
 import { emptySong } from '../lib/types'
 import { deleteSong, saveSong } from '../lib/store'
 import { splitLine } from '../lib/parse'
+import { isMusicLink, resolveTrack } from '../lib/link'
 import { normalize } from '../lib/text'
 import { Bidi } from './ui'
-import { Check, Close, Plus, Trash } from './icons'
+import { Check, Close, Paste, Plus, Trash } from './icons'
 
 function isDuplicate(songs: Song[], title: string, artist: string): boolean {
   if (!title) return false
@@ -41,24 +42,72 @@ export function QuickAddButton({ onOpen }: { onOpen: () => void }) {
   )
 }
 
-export function QuickAddSheet({ songs, onClose }: { songs: Song[]; onClose: () => void }) {
-  const [value, setValue] = useState('')
+export function QuickAddSheet({
+  songs,
+  initial = '',
+  onClose,
+}: {
+  songs: Song[]
+  initial?: string
+  onClose: () => void
+}) {
+  const [value, setValue] = useState(initial)
   const [sessionIds, setSessionIds] = useState<string[]>([])
+  const [busy, setBusy] = useState(false)
+  // A song arriving from a share sheet was just heard somewhere, so it starts
+  // life on the wish list; one typed by hand is usually one he already plays.
+  const [status, setStatus] = useState<SongStatus>(initial ? 'wish' : 'known')
+  const [note, setNote] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    inputRef.current?.focus()
-  }, [])
+    // A link arriving from the share sheet is already the whole job; opening
+    // the keyboard on top of it just gets in the way.
+    if (!initial) inputRef.current?.focus()
+  }, [initial])
+
+  /**
+   * The moment a music link lands in the field — pasted, shared or typed — it
+   * is swapped for the song's real name, so everything downstream (duplicate
+   * check, save) keeps working on plain text and Roei can still edit it.
+   */
+  useEffect(() => {
+    if (!isMusicLink(value)) return
+    let alive = true
+    setBusy(true)
+    setNote('')
+    void resolveTrack(value).then((track) => {
+      if (!alive) return
+      setBusy(false)
+      if (track) setValue(track.artist ? `${track.title} - ${track.artist}` : track.title)
+      else setNote('לא הצלחתי לזהות את השיר מהקישור, אפשר לכתוב את השם')
+    })
+    return () => {
+      alive = false
+    }
+  }, [value])
+
+  const pasteFromClipboard = async () => {
+    try {
+      const text = await navigator.clipboard.readText()
+      if (text.trim()) setValue(text.trim())
+      else setNote('הלוח ריק')
+    } catch {
+      setNote('לא הצלחתי לקרוא מהלוח, אפשר להדביק בשדה')
+      inputRef.current?.focus()
+    }
+  }
 
   const [title, artist] = splitLine(value)
   const duplicate = isDuplicate(songs, title, artist)
 
   const submit = () => {
     if (!title) return
-    const song = emptySong({ title, artist })
+    const song = emptySong({ title, artist, status })
     saveSong(song)
     setSessionIds((ids) => [song.id, ...ids])
     setValue('')
+    setNote('')
     inputRef.current?.focus()
   }
 
@@ -104,14 +153,24 @@ export function QuickAddSheet({ songs, onClose }: { songs: Song[]; onClose: () =
             ref={inputRef}
             value={value}
             onChange={(event) => setValue(event.target.value)}
-            placeholder="שם שיר, או שם שיר - אמן"
+            placeholder="שם שיר, או הדבקת קישור"
             dir="auto"
             enterKeyHint="done"
             className="w-full rounded-full border border-line/70 bg-ink px-4 py-3 text-cream placeholder:text-muted/50 outline-none focus:border-ember/60"
           />
+          {!value && (
+            <button
+              type="button"
+              onClick={pasteFromClipboard}
+              aria-label="הדבקת קישור מהלוח"
+              className="grid size-11 shrink-0 place-items-center rounded-full border border-line/70 text-muted transition active:scale-95"
+            >
+              <Paste className="size-5" />
+            </button>
+          )}
           <button
             type="submit"
-            disabled={!title}
+            disabled={!title || busy}
             aria-label="הוספה"
             className="grid size-11 shrink-0 place-items-center rounded-full bg-ember text-ink transition disabled:opacity-40 active:scale-95"
           >
@@ -119,8 +178,29 @@ export function QuickAddSheet({ songs, onClose }: { songs: Song[]; onClose: () =
           </button>
         </form>
 
+        <div className="mt-3 flex rounded-full border border-line/60 bg-ink p-0.5">
+          {([
+            ['known', 'אני יודע לנגן'],
+            ['wish', 'רוצה ללמוד'],
+          ] as const).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setStatus(id)}
+              className={`flex-1 rounded-full py-2 text-sm font-medium transition ${
+                status === id ? 'bg-ember text-ink' : 'text-muted'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
         <div className="min-h-5 px-1 pt-1.5 text-sm text-muted">
-          {duplicate && 'כבר יש שיר כזה ברשימה — יתווסף בכל זאת אם תשמור'}
+          {busy
+            ? 'מזהה את השיר מהקישור…'
+            : note ||
+              (duplicate ? 'כבר יש שיר כזה ברשימה — יתווסף בכל זאת אם תשמור' : '')}
         </div>
 
         <div className="no-scrollbar max-h-[40vh] overflow-y-auto pb-4">

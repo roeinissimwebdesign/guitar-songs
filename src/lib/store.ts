@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react'
 import { supabase, cloudEnabled } from './supabase'
-import type { Song, SongSet } from './types'
+import type { Song, SongSet, SongStatus } from './types'
 
 /**
  * Local-first store. The screen always renders from localStorage so the app
@@ -87,13 +87,19 @@ function persistSets(sets: SongSet[]) {
 
 export async function init() {
   emit({
-    songs: read<Song[]>(K.songs, []),
+    songs: read<Song[]>(K.songs, []).map((s) => ({ ...s, status: s.status ?? 'known' })),
     sets: read<SongSet[]>(K.sets, []),
     loaded: true,
   })
   refreshPending()
   await sync()
   window.addEventListener('online', () => void sync())
+  // Songs added from the Ideas app land in the cloud while this app sits in
+  // the background, so pull again whenever it comes back to the front.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') void sync()
+  })
+  window.addEventListener('focus', () => void sync())
 }
 
 export async function sync() {
@@ -162,7 +168,9 @@ async function pull() {
   if (setErr) throw setErr
 
   // Nothing is dirty at this point (push ran first), so the cloud is the truth.
-  persistSongs(((songs ?? []) as Song[]).map((s) => ({ ...s, tags: s.tags ?? [] })))
+  // Rows written before the known/wish split have no status — they are all
+  // songs Roei already plays, which is what 'known' means.
+  persistSongs(((songs ?? []) as Song[]).map((s) => ({ ...s, tags: s.tags ?? [], status: s.status ?? 'known' })))
   persistSets((sets ?? []) as SongSet[])
 }
 
@@ -207,6 +215,11 @@ export function deleteSong(id: string) {
 export function toggleFavorite(id: string) {
   const song = state.songs.find((s) => s.id === id)
   if (song) saveSong({ ...song, favorite: !song.favorite })
+}
+
+export function setSongStatus(id: string, status: SongStatus) {
+  const song = state.songs.find((s) => s.id === id)
+  if (song && song.status !== status) saveSong({ ...song, status })
 }
 
 export function markPlayed(id: string) {

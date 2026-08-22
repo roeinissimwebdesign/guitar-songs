@@ -31,10 +31,27 @@ export default function App() {
   const [editing, setEditing] = useState<Song | null>(null)
   const [importing, setImporting] = useState(false)
   const [settings, setSettings] = useState(false)
-  const [quickAdd, setQuickAdd] = useState(false)
+  const [quickAdd, setQuickAdd] = useState<string | null>(null)
 
   useEffect(() => {
     void init()
+  }, [])
+
+  /**
+   * Entry point for a song shared into the app from Spotify, YouTube or the
+   * radio-song shortcut: the link arrives as a query param, opens quick-add
+   * already filled, and is wiped from the address so a reload starts clean.
+   */
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const shared = ['add', 'url', 'text', 'title']
+      .map((key) => params.get(key))
+      .filter(Boolean)
+      .join(' ')
+      .trim()
+    if (!shared) return
+    setQuickAdd(shared)
+    window.history.replaceState(null, '', window.location.pathname)
   }, [])
 
   const activeSet = playing?.set ? sets.find((set) => set.id === playing.set!.id) : undefined
@@ -59,7 +76,7 @@ export default function App() {
     <div className="relative mx-auto flex h-full max-w-lg flex-col overflow-hidden">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex justify-between p-2">
         <div className="safe-top pointer-events-auto pe-2">
-          <QuickAddButton onOpen={() => setQuickAdd(true)} />
+          <QuickAddButton onOpen={() => setQuickAdd('')} />
         </div>
         <div className="safe-top pointer-events-auto ps-2">
           <IconButton onClick={() => setSettings(true)} label="הגדרות">
@@ -149,7 +166,9 @@ export default function App() {
         />
       )}
 
-      {quickAdd && <QuickAddSheet songs={songs} onClose={() => setQuickAdd(false)} />}
+      {quickAdd !== null && (
+        <QuickAddSheet songs={songs} initial={quickAdd} onClose={() => setQuickAdd(null)} />
+      )}
     </div>
   )
 }
